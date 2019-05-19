@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  simplesso-server:
+    build: .
+    volumes:
+      - ./SimpleSSO-Server:/src/
+    ports:
+      - "3001:3001"
+    restart: always
