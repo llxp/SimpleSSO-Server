@@ -5,10 +5,7 @@
  */
 
 var app = require('../app');
-var certAuthApp = require("../certAuth");
 var debug = require('debug')('http-oauth-server:server');
-var debug2 = require('debug')('http-oauth-certAuth:server');
-var http = require('http');
 var fs = require('fs');
 var https = require('https');
 
@@ -18,8 +15,6 @@ var https = require('https');
 
 var port = normalizePort('3001');
 app.set('port', port);
-var port2 = normalizePort('3002');
-certAuthApp.set('port', port2);
 
 /**
  * Create HTTP server.
@@ -28,18 +23,10 @@ certAuthApp.set('port', port2);
 var options = {
     key: fs.readFileSync('./certs/server-key.pem'),
     cert: fs.readFileSync('./certs/server-crt.pem'),
-    ca: fs.readFileSync('./certs/ca-crt.pem'),
-    requestCert: true,
-    rejectUnauthorized: true
+    ca: fs.readFileSync('./certs/ca-crt.pem')
 };
 
-var options2 = {
-  key: options.key,
-  cert: options.cert
-}
-
-var server = https.createServer(options2, app);
-var certAuthServer = https.createServer(options, certAuthApp);
+var server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -48,9 +35,6 @@ var certAuthServer = https.createServer(options, certAuthApp);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-certAuthServer.listen(port2);
-certAuthServer.on('error', onError);
-certAuthServer.on('listening', onListening2);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -106,14 +90,6 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
-
-function onListening2() {
-  var addr = certAuthServer.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
