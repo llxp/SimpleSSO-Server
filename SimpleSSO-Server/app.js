@@ -28,13 +28,13 @@ app.use(cors());
   })
 );*/
 
-app.use(
-  /*cookieSession({
-    name: 'session2',
-    keys: ["keyboard cat2"],
-    // Cookie Options
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  })*/
+/*app.use(
+  //cookieSession({
+  //  name: 'session2',
+  //  keys: ["keyboard cat2"],
+  //  // Cookie Options
+  //  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  //})
   session({
     store: new MemoryStore({
       checkPeriod: 86400000
@@ -49,7 +49,34 @@ app.use(
       secure: true
     }
   })
-);
+);*/
+
+var MongoDBStore = require('connect-mongodb-session')(session);
+
+var store = new MongoDBStore({
+  uri: 'mongodb://localhost:27017/SimpleSSOServer',
+  collection: 'session'
+});
+
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+
+app.use(session({
+  secret: 'This is a secret',
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    secure: true
+  },
+  store: store,
+  // Boilerplate options, see:
+  // * https://www.npmjs.com/package/express-session#resave
+  // * https://www.npmjs.com/package/express-session#saveuninitialized
+  resave: true,
+  saveUninitialized: true,
+  name: "session1"
+}));
 
 app.use((req, res, next) => {
   console.log(req.session);

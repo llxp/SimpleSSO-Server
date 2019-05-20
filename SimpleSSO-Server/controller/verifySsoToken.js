@@ -13,27 +13,30 @@ const verifySsoToken = async (req, res, next) => {
       return res.status(400).json({ message: "badRequest" });
     }
 
-    if(typeof applicationCache.validTokens[ssoToken] !== typeof undefined) {
-      // if the appToken is present and check if it's valid for the application
-      const appName = applicationCache.validTokens[ssoToken][1];
-      const globalSessionToken = applicationCache.validTokens[ssoToken][0];
-      const origin = req.get('origin');
+    applicationCache.validTokens.get(ssoToken, (obj) => {
 
-      if (typeof config.allowedOrigins[origin] !== typeof undefined) {
-      // If the appToken is not equal to ssoToken given during the sso app registraion or later stage than invalid
-      if (client_secret !== config.appTokenDB[appName] ||
-          //appToken !== config.appTokenDB[appName] ||
-          config.allowedOrigins[origin] !== true) {
+      if(typeof obj !== typeof undefined) {
+        // if the appToken is present and check if it's valid for the application
+        const appName = obj[1];
+        const globalSessionToken = obj[0];
+        const origin = req.get('origin');
+
+        if (typeof config.allowedOrigins[origin] !== typeof undefined) {
+          // If the appToken is not equal to ssoToken given during the sso app registraion or later stage than invalid
+          if (client_secret !== config.appTokenDB[appName] ||
+              //appToken !== config.appTokenDB[appName] ||
+              config.allowedOrigins[origin] !== true) {
+            return res.status(403).json({ message: "Unauthorized" });
+          } else {
+            return res.status(200).json({ status: "Ok" });
+          }
+    	} else {
+          return res.status(403).json({ message: "wrong origin" });
+        }
+      } else {
         return res.status(403).json({ message: "Unauthorized" });
       }
-
-      return res.status(200).json({ status: "Ok" });
-    } else {
-      return res.status(403).json({ message: "wrong origin" });
-    }
-    } else {
-      return res.status(403).json({ message: "Unauthorized" });
-    }
+    });
   } catch(error) {
     console.log(error);
     return res.status(500).json({ message: "failure" });

@@ -9,10 +9,11 @@
       <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
       <div class="checkbox mb-3"></div>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <a href="https://localhost:3002/certAuth?redirect_uri={{redirect_uri}}" onclick="certAuthClicked(event);">Certificate Authentication</a>
+      <a href="https://{{certAuthHostname}}/certAuth?redirect_uri={{redirect_uri}}" onclick="certAuthClicked(event);">Certificate Authentication</a>
       <div id='certAuthErrorContainer'></div>
       <div id='loadingSpinnerContainer'></div>
     </form>
   </div>
   <script src="/javascripts/certAuth.js"></script>
+  <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js"></script>
 {% endblock %}

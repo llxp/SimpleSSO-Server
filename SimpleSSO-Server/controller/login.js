@@ -12,6 +12,8 @@ const login = (req, res, next) => {
   // direct access will give the error inside new URL.
   if (redirect_uri != null) {
     const url = new URL(redirect_uri);
+    console.log(url);
+    console.log(Object.keys(config.allowedOrigins));
     if (config.allowedOrigins[url.origin] !== true) {
       return res
         .status(400)
@@ -27,13 +29,15 @@ const login = (req, res, next) => {
       redirect_uri != null) {
     const url = new URL(redirect_uri);
     const intrmid = encodedId();
+    console.log("storeApplicationInCache");
     applicationCache.storeApplicationInCache(url.origin, req.session.user, intrmid);
     return res.redirect(`${redirect_uri}?ssoToken=${intrmid}`);
   }
 
   return res.render("login", {
     title: "SSO-Server | Login",
-    redirect_uri: redirect_uri
+    redirect_uri: redirect_uri,
+    certAuthHostname: config.hostname.certAuthHostname
   });
 };
 

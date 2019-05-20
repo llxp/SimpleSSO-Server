@@ -6,7 +6,7 @@ function createCORSRequest(method, url) {
     // "withCredentials" only exists on XMLHTTPRequest2 objects.
     xhr.open(method, url, true);
 
-  } else if (typeof XDomainRequest != "undefined") {
+  } else if (typeof XDomainRequest !== typeof undefined) {
 
     // Otherwise, check if XDomainRequest.
     // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
@@ -25,7 +25,12 @@ function createCORSRequest(method, url) {
 function certAuthClicked(event) {
 	event.preventDefault();
 	//return false;
-	var url = new URL(event.target.href);
+        var urlString = event.target.href;
+        //urlString = [urlString.slice(0, 'https://'.length-1), window.location.hostname, urlString.slice('https://'.length)].join('');
+        //console.log(urlString);
+	var url = new URL(urlString);
+        //url.hostname.set(window.location.hostname);
+        //console.log(url.toString);
 	if(url.search.length > 0) {
 		url.searchParams.set('result', 'return');
 	}
@@ -44,7 +49,7 @@ function certAuthClicked(event) {
 				}
 			} else {
 				if(parsedResponse.message === 'redirect_uri is missing') {
-					window.location.href = 'https://localhost:3001';
+					window.location.href = 'https://' + window.location.hostname + ':3001';
 				}
 				console.log('There was an error: ', xhr.state, parsedResponse.message);
 			}

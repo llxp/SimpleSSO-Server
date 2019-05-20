@@ -16,7 +16,7 @@ const doLogin = (req, res, next) => {
 
   const id = encodedId();
   req.session.user = id;
-  applicationCache.sessionUser[id] = email;
+  applicationCache.sessionUser.set(id, email);
   // redirect, if the redirect_uri is empty
   if (redirect_uri == null ||
        redirect_uri.length <= 0) {
