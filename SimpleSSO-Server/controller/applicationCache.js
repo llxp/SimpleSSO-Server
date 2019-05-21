@@ -48,6 +48,15 @@ const removeApplicationFromCache = (origin, id) => {
   getSessionApp(id, (obj) => {
     if(typeof obj !== typeof undefined) {
       deleteSessionApp(id);
+      initDatabase((db)=> {
+        db.collection('ValidTokens', async function(err, collection) {
+          if(err) throw err;
+          const obj = await collection.findOne({data: id});
+          if(typeof obj !== typeof undefined && obj != null) {
+            deleteValidTokens(obj.sessionId);
+          }
+        });
+      });
     }
   });
 };
