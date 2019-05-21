@@ -10,5 +10,6 @@ router
 
 router.get("/upgradetoken", controller.upgradeSsoToken);
 router.get("/verifytoken", controller.verifySsoToken);
+router.get("/logout", controller.logout);
 
 module.exports = router;

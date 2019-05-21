@@ -9,10 +9,12 @@ const login = require("./login");
 const doLogin = require("./doLogin");
 const verifySsoToken = require("./verifySsoToken");
 const upgradeSsoToken = require("./upgradeSsoToken");
+const logout = require('./logout');
 
 module.exports = {
   doLogin: doLogin,
   login: login,
   upgradeSsoToken: upgradeSsoToken,
-  verifySsoToken: verifySsoToken
+  verifySsoToken: verifySsoToken,
+  logout: logout
 };

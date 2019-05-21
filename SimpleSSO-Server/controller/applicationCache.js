@@ -14,7 +14,7 @@ var MongoClient = require('mongodb').MongoClient;
 var dbObject = {};
 
 const initDatabase = (callback) => {
-  MongoClient.connect("mongodb://localhost:27017/SimpleSSOServer", function (err, db) {
+  MongoClient.connect(config.databaseConfig.databaseUrl, function (err, db) {
     if(err) throw err;
     dbObject = db;
     callback(db);
@@ -42,6 +42,14 @@ const storeApplicationInCache = (origin, id, intrmToken) => {
     }
   });
   //console.log({ ...sessionApp }, { ...sessionUser }, { intrmTokenCache });
+};
+
+const removeApplicationFromCache = (origin, id) => {
+  getSessionApp(id, (obj) => {
+    if(typeof obj !== typeof undefined) {
+      deleteSessionApp(id);
+    }
+  });
 };
 
 const fillValidTokenCache = (origin, id, bearerToken) => {
