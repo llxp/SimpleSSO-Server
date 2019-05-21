@@ -14,11 +14,11 @@ var MongoClient = require('mongodb').MongoClient;
 var dbObject = {};
 
 const initDatabase = (callback) => {
-    MongoClient.connect("mongodb://localhost:27017/SimpleSSOServer", function (err, db) {
-      if(err) throw err;
-      dbObject = db;
-      callback(db);
-    });
+  MongoClient.connect("mongodb://localhost:27017/SimpleSSOServer", function (err, db) {
+    if(err) throw err;
+    dbObject = db;
+    callback(db);
+  });
 };
 
 const fillIntrmTokenCache = (origin, id, intrmToken) => {
@@ -74,6 +74,7 @@ const getIntrmTokenCache = (token, callback) => {
       } else {
         callback(null);
       }
+      db.close();
     });
   });
 };
@@ -87,6 +88,7 @@ const setIntrmTokenCache = (token, obj) => {
       } else {
         await collection.insertOne({tokenId: token, data: obj});
       }
+      db.close();
     });
   });
 }
@@ -96,6 +98,7 @@ const deleteIntrmTokenCache = (token) => {
     db.collection('IntrmTokenCache', async function(err, collection) {
       if(err) throw err;
       await collection.deleteOne({tokenId: token});
+      db.close();
     });
   });
 };
@@ -110,6 +113,7 @@ const getSessionApp = (id, callback) => {
       } else {
         callback(null);
       }
+      db.close();
     });
   });
 };
@@ -123,6 +127,7 @@ const setSessionApp = (id, obj) => {
       } else {
         await collection.insertOne({sessionId: id, data: obj});
       }
+      db.close();
     });
   });
 };
@@ -132,6 +137,7 @@ const deleteSessionApp = (id) => {
     db.collection('SessionApp', async function(err, collection) {
       if(err) throw err;
       await collection.deleteOne({sessionId: id});
+      db.close();
     });
   });
 };
@@ -146,6 +152,7 @@ const getSessionUser = (id, callback) => {
       } else {
         callback(null);
       }
+      db.close();
     });
   });
 };
@@ -159,6 +166,7 @@ const setSessionUser = (id, obj) => {
       } else {
         await collection.insertOne({sessionId: id, data: obj});
       }
+      db.close();
     });
   });
 };
@@ -168,6 +176,7 @@ const deleteSessionUser = (id) => {
     db.collection('SessionUser', async function(err, collection) {
       if(err) throw err;
       await collection.deleteOne({sessionId: id});
+      db.close();
     });
   });
 };
@@ -182,6 +191,7 @@ const getValidTokens = (id, callback) => {
       } else {
         callback(null);
       }
+      db.close();
     });
   });
 };
@@ -195,6 +205,7 @@ const setValidTokens = (id, obj) => {
       } else {
         await collection.insertOne({sessionId: id, data: obj});
       }
+      db.close();
     });
   });
 };
@@ -204,6 +215,7 @@ const deleteValidTokens = (id) => {
     db.collection('ValidTokens', async function(err, collection) {
       if(err) throw err;
       await collection.deleteOne({sessionId: id});
+      db.close();
     });
   });
 };

@@ -4,6 +4,7 @@ const originAppNames = require("./originAppNames");
 const userDB = require("./userDB");
 const keys = require("./keys");
 const hostname = require('./hostname');
+const databaseConfig = require('./databaseConfig');
 
 module.exports = {
 	allowedOrigins: allowedOrigins,
@@ -11,5 +12,6 @@ module.exports = {
 	originAppNames: originAppNames,
 	userDB: userDB,
 	keys: keys,
-        hostname: hostname
+        hostname: hostname,
+        databaseConfig: databaseConfig
 };
